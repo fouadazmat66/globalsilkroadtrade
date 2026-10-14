@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Silk Road Trade Hub</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--bg:#f2f5f7;--surface:#fff;--ink:#14202b;--mute:#52606d;--line:#d5dde3;--lapis:#1f4e79;--lapis-t:#e3edf6;--saf:#d9961a;--jade:#2e7d6b;--jade-t:#e1f1ec;--warn:#9a3b1f;--warn-t:#fbeae4;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1820;--surface:#17232e;--ink:#e8eef2;--mute:#9db0be;--line:#2a3b49;--lapis:#7fb3e3;--lapis-t:#1b2f42;--saf:#f0b445;--jade:#5fc2a8;--jade-t:#17332d;--warn:#f0a58a;--warn-t:#3a2119;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1820;--surface:#17232e;--ink:#e8eef2;--mute:#9db0be;--line:#2a3b49;--lapis:#7fb3e3;--lapis-t:#1b2f42;--saf:#f0b445;--jade:#5fc2a8;--jade-t:#17332d;--warn:#f0a58a;--warn-t:#3a2119;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 "Source Sans 3",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Source Sans 3",system-ui,sans-serif;line-height:1.15;margin:0}
+a{color:var(--lapis)}
+:focus-visible{outline:3px solid var(--saf);outline-offset:2px}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:20px;height:56px;overflow-x:auto;white-space:nowrap}
+nav b{font-family:"Bricolage Grotesque",sans-serif;font-size:18px;color:var(--ink);margin-right:auto}
+nav a{text-decoration:none;color:var(--mute);font-size:15px;font-weight:600}
+nav a:hover{color:var(--ink)}
+.hero{padding:64px 0 40px;background:#16395a;color:#f4f7fa;background-image:radial-gradient(rgba(255,255,255,.07) 1.5px,transparent 1.5px);background-size:22px 22px}
+.hero h1{font-size:clamp(34px,6vw,56px);font-weight:700;max-width:16em;letter-spacing:-.02em}
+.hero p{max-width:34em;color:#c9d8e6;font-size:19px;margin:16px 0 24px}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;padding:11px 20px;border-radius:6px;font-weight:600;text-decoration:none;border:2px solid var(--lapis);color:var(--lapis)}
+.btn.main{background:var(--lapis);color:var(--bg)}.hero .btn{border-color:#f0b445;color:#f0b445}.hero .btn.main{background:#f0b445;color:#14202b}button.btn{font:600 16px "Source Sans 3",sans-serif;cursor:pointer}
+.route{margin:36px 0 0;width:100%;height:auto;overflow:visible}
+.route text{font:600 13px "Source Sans 3",sans-serif;fill:#f4f7fa}
+.route .path{fill:none;stroke:#f0b445;stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round}
+.route circle{fill:#7fb3e3;stroke:#16395a;stroke-width:3}
+.route .cn{fill:#f0b445}
+@media(prefers-reduced-motion:no-preference){.route .path{animation:draw 2.4s ease-out both}@keyframes draw{from{stroke-dashoffset:-400;opacity:.2}to{opacity:1}}}
+section{padding:56px 0 8px}
+section h2{font-size:clamp(26px,4vw,36px);margin-bottom:8px;padding-left:14px;border-left:5px solid var(--saf)}
+.lead{color:var(--mute);max-width:40em;margin:0 0 24px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;box-shadow:0 1px 2px rgba(20,32,43,.06),0 8px 24px rgba(20,32,43,.06)}.grid .panel{border-top:4px solid var(--lapis)}
+.check{list-style:none;margin:0;padding:0}
+.check li{border-bottom:1px solid var(--line)}
+.check li:last-child{border:0}
+.check label{display:flex;gap:12px;padding:12px 0;cursor:pointer;align-items:flex-start}
+.check input{width:20px;height:20px;margin-top:4px;accent-color:var(--jade);flex:none}
+.check small{display:block;color:var(--mute);font-size:15px;line-height:1.5}
+.meter{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:14px 0 6px}
+.meter i{display:block;height:100%;width:0;background:var(--jade);transition:width .25s}
+#score{font-weight:600}
+#verdict{margin:6px 0 0;padding:10px 14px;border-radius:6px;background:var(--warn-t);color:var(--warn);font-weight:600}
+#verdict.ok{background:var(--jade-t);color:var(--jade)}
+.pick{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.pick button{font:600 15px "Source Sans 3",sans-serif;padding:8px 16px;border-radius:20px;border:2px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.pick button[aria-pressed="true"]{border-color:var(--lapis);background:var(--lapis-t);color:var(--lapis)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.grid h3{font-size:18px;margin-bottom:6px;color:var(--lapis)}
+.grid p,.grid ul{margin:0;font-size:16px}
+.grid ul{padding-left:18px}
+.note{font-size:14px;color:var(--mute);margin-top:14px}
+dl{margin:0;display:grid;gap:0}
+dt{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:18px;padding-top:14px;color:var(--lapis)}
+dd{margin:2px 0 0;padding-bottom:14px;border-bottom:1px solid var(--line)}
+dd:last-child{border:0}
+table{width:100%;border-collapse:collapse}
+td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border:0}
+.zh{font-size:22px;line-height:1.4}
+.py{color:var(--lapis);font-size:15px}
+.tw{overflow-x:auto}
+footer{margin-top:64px;border-top:1px solid var(--line);padding:28px 0 40px;color:var(--mute);font-size:15px}
+footer strong{color:var(--ink)}.msgs{height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:4px 2px 12px}.m{max-width:85%;padding:10px 14px;border-radius:14px;white-space:pre-wrap}.m.bot{background:var(--lapis-t);align-self:flex-start;border-bottom-left-radius:4px}.m.me{background:var(--lapis);color:var(--bg);align-self:flex-end;border-bottom-right-radius:4px}.sug{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}.sug button{font:600 14px "Source Sans 3",sans-serif;padding:6px 12px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--lapis);cursor:pointer}.row{display:flex;gap:10px}.row input{flex:1;min-width:0;font:400 16px "Source Sans 3",sans-serif;padding:10px 14px;border-radius:6px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+<b>Silk Road Trade Hub</b>
+<a href="#safety">Buyer safety</a><a href="#cards">Trade cards</a><a href="#terms">Trade terms</a><a href="#phrases">Chinese phrases</a><a href="#about">About</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+<h1>Trade with China, one clear step at a time</h1>
+<p>Plain guides for small traders and students working between China and the Silk Road countries. Check a supplier, read a route guide, learn the terms, and speak a few words of business Chinese.</p>
+<div class="btns"><a class="btn main" href="#safety">Check a supplier</a><a class="btn" href="#cards">Pick a trade route</a></div>
+<svg class="route" viewBox="0 0 680 150" role="img" aria-label="A dotted route from China through Kazakhstan, Pakistan, Turkey and the UAE">
+<path class="path" d="M60 100 C150 20 220 30 290 70 S 400 130 470 70 S 590 20 630 80"/>
+<circle class="cn" cx="60" cy="100" r="9"/><text x="60" y="130" text-anchor="middle">China</text>
+<circle cx="200" cy="38" r="7"/><text x="200" y="22" text-anchor="middle">Kazakhstan</text>
+<circle cx="290" cy="70" r="7"/><text x="290" y="100" text-anchor="middle">Pakistan</text>
+<circle cx="470" cy="70" r="7"/><text x="470" y="100" text-anchor="middle">UAE</text>
+<circle cx="630" cy="80" r="7"/><text x="630" y="110" text-anchor="middle">Turkey</text>
+</svg>
+</div></header>
+
+<main class="wrap">
+
+<section id="safety">
+<h2>Buyer safety checklist</h2>
+<p class="lead">Scams cost small buyers real money. Work through these steps before you pay a supplier in China, and tick each one as you finish it.</p>
+<div class="panel">
+<ul class="check" id="list"></ul>
+<div class="meter"><i id="bar"></i></div>
+<div id="score">0 of 9 done</div>
+<p id="verdict">Not ready to pay yet. Keep going.</p>
+</div>
+</section>
+
+<section id="cards">
+<h2>Trade cards</h2>
+<p class="lead">Pick a route to see a one-page starter guide.</p>
+<div class="pick" id="pick" role="group" aria-label="Choose a route"></div>
+<div class="grid" id="card"></div>
+<p class="note">General guidance only, not legal or customs advice. Always confirm rules, duties and documents with the customs authority of each country before you ship.</p>
+</section>
+
+<section id="terms">
+<h2>Trade terms</h2>
+<p class="lead">The words you will meet in almost every deal, in plain English.</p>
+<div class="panel"><dl>
+<dt>Incoterms</dt><dd>Standard rules that say who pays for shipping, insurance and risk at each stage. Examples: EXW (buyer handles almost everything), FOB (seller delivers goods onto the ship), CIF (seller pays freight and insurance to the destination port).</dd>
+<dt>Letter of credit (L/C)</dt><dd>A bank's promise to pay the seller once the seller shows the agreed documents. It protects both sides.</dd>
+<dt>HS code</dt><dd>A number that classifies a product for customs. It decides the duty you pay, so ask your supplier and your customs agent to confirm it.</dd>
+<dt>Bill of lading</dt><dd>The document a carrier issues for your shipment. It is a receipt, a contract of carriage, and usually proof of ownership.</dd>
+<dt>Certificate of origin</dt><dd>Shows which country the goods were made in. It can lower duties under a trade agreement.</dd>
+<dt>MOQ</dt><dd>Minimum order quantity: the smallest order a supplier will accept.</dd>
+</dl></div>
+<p class="note">Urdu and Chinese versions of these pages are planned.</p>
+</section>
+
+<section id="phrases">
+<h2>Business Chinese phrases</h2>
+<p class="lead">Ten phrases for meetings, prices and delivery.</p>
+<div class="panel tw"><table id="ph"></table></div>
+</section>
+
+<section id="about">
+<h2>About this site</h2>
+<div class="panel">
+<p style="margin-top:0">Silk Road Trade Hub puts the basics of international trade in one clear place for small traders, students and beginners. It brings together ideas from international trade, international business, business administration and international relations.</p>
+<p style="margin-bottom:0">Created by <strong>Muhammad Fouad</strong>, <a href="https://greentrip.ai.studio/">GreenTrip</a></p>
+</div>
+</section>
+</main>
+
+<footer><div class="wrap">
+<div>Created by <strong>Muhammad Fouad</strong>, <a href="https://greentrip.ai.studio/">GreenTrip</a></div>
+<div>Silk Road Trade Hub is a free guide and does not replace professional legal, financial or customs advice.</div>
+</div></footer>
+
+<script>
+var steps=[
+["Check the business licence","Ask for it and match the company name to an official company registry."],
+["Search the company name online","Add words like scam or fraud and read what comes up."],
+["Request a video call","Ask to see the office, warehouse or factory on camera."],
+["Order a sample first","Test the sample before you place a large order."],
+["Compare at least three quotes","Be careful with any price far below the others."],
+["Never pay everything upfront","Use staged payments, a letter of credit or a platform's payment protection."],
+["Pay only to a company account","The account name must match the supplier. Avoid personal accounts."],
+["Put it in a written contract","Include price, quantity, quality, delivery date and what happens if it goes wrong."],
+["Inspect before shipping","Consider an independent inspection of the goods before they leave."]];
+var ul=document.getElementById("list");
+steps.forEach(function(s,i){var li=document.createElement("li");li.innerHTML='<label><input type="checkbox"><span><b>'+s[0]+'</b><small>'+s[1]+'</small></span></label>';ul.appendChild(li)});
+function upd(){var n=ul.querySelectorAll("input:checked").length,t=steps.length;
+document.getElementById("bar").style.width=(n/t*100)+"%";
+document.getElementById("score").textContent=n+" of "+t+" done";
+var v=document.getElementById("verdict");
+if(n===t){v.textContent="All steps done. You have taken the main precautions.";v.className="ok"}
+else if(n>=6){v.textContent="Nearly there. Finish the remaining steps before you pay.";v.className=""}
+else{v.textContent="Not ready to pay yet. Keep going.";v.className=""}}
+ul.addEventListener("change",upd);
+
+var docs="Commercial invoice, packing list, bill of lading or airway bill, certificate of origin, and any product certificates your customs authority requires.";
+var routes={
+"China and Pakistan":{goods:"Pakistan commonly exports textiles, seafood, sesame and minerals to China. China commonly sells machinery, electronics and chemicals to Pakistan.",tip:"Be on time, exchange business cards with both hands, and invest time in the relationship before pushing for a deal.",rel:"The China-Pakistan Economic Corridor (CPEC) is a long-running infrastructure and trade partnership linking the two countries."},
+"China and Kazakhstan":{goods:"Kazakhstan commonly exports oil, metals and grain. China commonly sells machinery, electronics and consumer goods.",tip:"Face-to-face meetings matter. Expect hospitality first and business discussion after.",rel:"Kazakhstan sits on the overland rail routes between China and Europe, so it is central to Belt and Road trade."},
+"China and Turkey":{goods:"Turkey commonly exports textiles, vehicles, machinery and food. China commonly sells electronics, machinery and components.",tip:"Personal relationships and tea or coffee meetings are part of doing business. Be patient on timing.",rel:"Turkey is a bridge between Asia and Europe and is linked to the Middle Corridor trade route."},
+"China and UAE":{goods:"The UAE is a major re-export and trading hub, with oil, gold and goods in transit. China commonly sells electronics, machinery and consumer goods.",tip:"Business is international and fast. Written confirmation of every agreement is standard.",rel:"UAE ports and free zones make it a common gateway for goods moving to the Middle East and Africa."}};
+var pick=document.getElementById("pick"),card=document.getElementById("card");
+function show(k){var r=routes[k];
+card.innerHTML='<div class="panel"><h3>What is traded</h3><p>'+r.goods+'</p></div><div class="panel"><h3>Documents usually needed</h3><p>'+docs+'</p></div><div class="panel"><h3>Business etiquette</h3><p>'+r.tip+'</p></div><div class="panel"><h3>Trade relations</h3><p>'+r.rel+'</p></div>';
+pick.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",b.textContent===k)})}
+Object.keys(routes).forEach(function(k){var b=document.createElement("button");b.textContent=k;b.onclick=function(){show(k)};pick.appendChild(b)});
+show("China and Pakistan");
+
+var ph=[
+["你好,很高兴认识你。","Nǐ hǎo, hěn gāoxìng rènshi nǐ.","Hello, nice to meet you."],
+["请问价格是多少?","Qǐngwèn jiàgé shì duōshao?","What is the price?"],
+["最小起订量是多少?","Zuìxiǎo qǐdìngliàng shì duōshao?","What is the minimum order quantity?"],
+["可以发样品吗?","Kěyǐ fā yàngpǐn ma?","Can you send a sample?"],
+["能便宜一点吗?","Néng piányi yìdiǎn ma?","Can you lower the price a little?"],
+["交货时间是多久?","Jiāohuò shíjiān shì duōjiǔ?","How long does delivery take?"],
+["付款方式是什么?","Fùkuǎn fāngshì shì shénme?","What are the payment terms?"],
+["请发一份发票。","Qǐng fā yí fèn fāpiào.","Please send an invoice."],
+["请再说一遍。","Qǐng zài shuō yí biàn.","Please say that again."],
+["谢谢,我们保持联系。","Xièxie, wǒmen bǎochí liánxì.","Thank you, let's keep in touch."]];
+document.getElementById("ph").innerHTML=ph.map(function(p){return '<tr><td><div class="zh" lang="zh">'+p[0]+'</div><div class="py">'+p[1]+'</div></td><td>'+p[2]+'</td></tr>'}).join("");
+</script>
+</body>
+</html>
